@@ -9,7 +9,7 @@ import (
 type cardTheme struct{}
 
 func (c cardTheme) BackgroundColor() color.Color {
-	return color.Transparent
+	return &color.NRGBA{R: 0, G: 0, B: 0x4d, A: 0xff}
 }
 
 func (c cardTheme) ButtonColor() color.Color {
@@ -102,4 +102,12 @@ func (c cardTheme) ScrollBarSize() int {
 
 func (c cardTheme) ScrollBarSmallSize() int {
 	return 4
+}
+
+type overlayTheme struct{
+	cardTheme
+}
+
+func (c overlayTheme) BackgroundColor() color.Color {
+	return color.Transparent
 }

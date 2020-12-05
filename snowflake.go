@@ -135,6 +135,7 @@ func koch(start, stop fyne.Position, len, angle, count int) []*canvas.Line {
 func captureSnowflake(s fyne.Size, bg bool) image.Image {
 	c := playground.NewSoftwareCanvas()
 	c.SetPadded(false)
+	fyne.CurrentApp().Settings().SetTheme(&overlayTheme{})
 
 	var content fyne.CanvasObject
 	if bg {
@@ -148,5 +149,7 @@ func captureSnowflake(s fyne.Size, bg bool) image.Image {
 	c.Resize(s)
 	c.SetScale(2)
 
-	return c.Capture()
+	img := c.Capture()
+	fyne.CurrentApp().Settings().SetTheme(&cardTheme{})
+	return img
 }

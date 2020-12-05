@@ -1,6 +1,7 @@
 package main
 
 import (
+	"image"
 	"image/color"
 	"math/rand"
 	"time"
@@ -9,6 +10,12 @@ import (
 	"fyne.io/fyne/canvas"
 	"fyne.io/fyne/widget"
 )
+
+var pix image.Image
+
+func init() {
+	pix = captureSnowflake(flakeSizeLarge.Add(flakeSizeLarge), false)
+}
 
 type snow struct {
 	widget.BaseWidget
