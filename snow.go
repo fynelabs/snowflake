@@ -24,15 +24,16 @@ func newSnowLayer() *snow {
 }
 
 func (s *snow) animate() {
+	even := false
 	for {
-		<-time.After(time.Millisecond * 50)
+		<-time.After(time.Millisecond * 33)
 		var flakes []fyne.CanvasObject
 		for _, f := range s.flakes {
 			if f.Size().Height > 40 {
-				f.Move(f.Position().Add(fyne.NewPos(0, 3)))
-			} else if f.Size().Height > 20 {
 				f.Move(f.Position().Add(fyne.NewPos(0, 2)))
-			} else {
+			} else if f.Size().Height > 20 {
+				f.Move(f.Position().Add(fyne.NewPos(0, 1)))
+			} else if even { // half speed for small
 				f.Move(f.Position().Add(fyne.NewPos(0, 1)))
 			}
 
@@ -40,14 +41,14 @@ func (s *snow) animate() {
 				flakes = append(flakes, f)
 			}
 		}
+
+		even = !even
 		s.flakes = flakes
 		canvas.Refresh(s)
 	}
 }
 
 func (s *snow) snow() {
-	pix := captureSnowflake(flakeSizeLarge.Add(flakeSizeLarge), false)
-
 	space := s.Size().Width - flakeSizeLarge.Width
 	count := space / 50
 	for i := 0; i < count; i++ {
