@@ -44,7 +44,7 @@ func (s *snow) animate() {
 				f.Move(f.Position().Add(fyne.NewPos(0, 1)))
 			}
 
-			if f.Position().Y < s.Size().Height {
+			if f.Position().Y < s.Size().Height + 36 { // mobile overflow approximation
 				flakes = append(flakes, f)
 			}
 		}
