@@ -86,13 +86,14 @@ func (r *snowflakeRender) Refresh() {
 
 func newLine(start, stop fyne.Position) *canvas.Line {
 	l := canvas.NewLine(theme.TextColor())
+	l.StrokeWidth = 3
 	l.Position1 = start
 	l.Position2 = stop
 	return l
 }
 
 func koch(start, stop fyne.Position, len, angle, count int) []*canvas.Line {
-	if count == 1 {
+	if count == 0 {
 		return []*canvas.Line{newLine(start, stop)}
 	}
 

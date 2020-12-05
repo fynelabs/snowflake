@@ -30,10 +30,10 @@ func makeUI() fyne.CanvasObject {
 				_ = fyne.CurrentApp().OpenURL(u)
 			})))
 
-	flake := newSnowFlake(3)
+	flake := newSnowFlake(2)
 	label := widget.NewLabel(fmt.Sprintf("%d", flake.Count))
 	down := widget.NewButtonWithIcon("", theme.MoveDownIcon(), func() {
-		if flake.Count <= 1 {
+		if flake.Count <= 0 {
 			return
 		}
 
@@ -43,7 +43,7 @@ func makeUI() fyne.CanvasObject {
 	})
 	down.Importance = widget.LowImportance
 	up := widget.NewButtonWithIcon("", theme.MoveUpIcon(), func() {
-		if flake.Count >= 6 {
+		if flake.Count >= 5 {
 			return
 		}
 
