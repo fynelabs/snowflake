@@ -1,13 +1,22 @@
 package main
 
 import (
+	"image"
 	"image/color"
 	"math"
 
 	"fyne.io/fyne"
 	"fyne.io/fyne/canvas"
+	"fyne.io/fyne/container"
 	"fyne.io/fyne/theme"
+	"fyne.io/fyne/tools/playground"
 	"fyne.io/fyne/widget"
+)
+
+var (
+	flakeSizeSmall = fyne.Size{16, 16}
+	flakeSizeMid   = fyne.Size{24, 24}
+	flakeSizeLarge = fyne.Size{48, 48}
 )
 
 type snowflake struct {
@@ -121,4 +130,23 @@ func koch(start, stop fyne.Position, len, angle, count int) []*canvas.Line {
 		lines = append(lines, line)
 	}
 	return lines
+}
+
+func captureSnowflake(s fyne.Size, bg bool) image.Image {
+	c := playground.NewSoftwareCanvas()
+	c.SetPadded(false)
+
+	var content fyne.CanvasObject
+	if bg {
+		content = container.NewMax(
+			canvas.NewRectangle(&color.NRGBA{R: 0, G: 0, B: 0x4d, A: 0xff}),
+			container.NewPadded(newSnowFlake(2)))
+	} else {
+		content = container.NewPadded(newSnowFlake(2))
+	}
+	c.SetContent(content)
+	c.Resize(s)
+	c.SetScale(2)
+
+	return c.Capture()
 }

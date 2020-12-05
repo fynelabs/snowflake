@@ -16,7 +16,7 @@ import (
 	"fyne.io/fyne/widget"
 )
 
-func makeUI() fyne.CanvasObject {
+func makeUI(s *snow) fyne.CanvasObject {
 	merry := canvas.NewText("Merry Christmas", color.White)
 	merry.Alignment = fyne.TextAlignCenter
 	merry.TextSize = 42
@@ -52,9 +52,15 @@ func makeUI() fyne.CanvasObject {
 		flake.Refresh()
 	})
 	up.Importance = widget.LowImportance
+	start := widget.NewButton("Snow", func() {
+		s.snow()
+	})
+	start.Importance = widget.LowImportance
+
 	return container.NewBorder(to, texts, nil, nil, flake,
-		container.NewCenter(container.NewHBox(
-			down, label, up)))
+		container.NewCenter(container.NewVBox(container.NewHBox(
+			down, label, up),
+			start)))
 }
 
 func main() {
@@ -62,8 +68,12 @@ func main() {
 	a.Settings().SetTheme(&cardTheme{})
 	w := a.NewWindow("Snowflake")
 
-	w.SetPadded(true)
-	w.SetContent(container.NewPadded(makeUI()))
+	s := newSnowLayer()
+	w.SetPadded(false)
+	w.SetContent(container.NewMax(
+		canvas.NewRectangle(&color.NRGBA{R: 0, G: 0, B: 0x4d, A: 0xff}),
+		container.NewPadded(container.NewPadded(makeUI(s))),
+		s))
 	w.Resize(fyne.NewSize(360, 520))
 	w.ShowAndRun()
 }

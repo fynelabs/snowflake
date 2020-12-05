@@ -9,7 +9,7 @@ import (
 type cardTheme struct{}
 
 func (c cardTheme) BackgroundColor() color.Color {
-	return &color.NRGBA{R: 0, G: 0, B: 0x4d, A: 0xff}
+	return color.Transparent
 }
 
 func (c cardTheme) ButtonColor() color.Color {
