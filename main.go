@@ -7,13 +7,13 @@ import (
 	"image/color"
 	"net/url"
 
-	"fyne.io/fyne"
-	"fyne.io/fyne/app"
-	"fyne.io/fyne/canvas"
-	"fyne.io/fyne/container"
-	"fyne.io/fyne/layout"
-	"fyne.io/fyne/theme"
-	"fyne.io/fyne/widget"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 )
 
 func makeUI(s *snow) fyne.CanvasObject {
@@ -65,7 +65,7 @@ func makeUI(s *snow) fyne.CanvasObject {
 
 func main() {
 	a := app.New()
-	a.Settings().SetTheme(&cardTheme{})
+	a.Settings().SetTheme(theme.FromLegacy(&cardTheme{}))
 	w := a.NewWindow("Snowflake")
 
 	s := newSnowLayer()

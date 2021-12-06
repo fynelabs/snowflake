@@ -6,9 +6,9 @@ import (
 	"math/rand"
 	"time"
 
-	"fyne.io/fyne"
-	"fyne.io/fyne/canvas"
-	"fyne.io/fyne/widget"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/widget"
 )
 
 var pix image.Image
@@ -33,15 +33,15 @@ func newSnowLayer() *snow {
 func (s *snow) animate() {
 	even := false
 	for {
-		<-time.After(time.Millisecond * 33)
+		<-time.After(time.Millisecond * 16)
 		var flakes []fyne.CanvasObject
 		for _, f := range s.flakes {
 			if f.Size().Height > 40 {
-				f.Move(f.Position().Add(fyne.NewPos(0, 2)))
+				f.Move(f.Position().Add(fyne.NewPos(0, 1)))
 			} else if f.Size().Height > 20 {
-				f.Move(f.Position().Add(fyne.NewPos(0, 1)))
+				f.Move(f.Position().Add(fyne.NewPos(0, 0.5)))
 			} else if even { // half speed for small
-				f.Move(f.Position().Add(fyne.NewPos(0, 1)))
+				f.Move(f.Position().Add(fyne.NewPos(0, 0.5)))
 			}
 
 			if f.Position().Y < s.Size().Height + 36 { // mobile overflow approximation
@@ -56,7 +56,7 @@ func (s *snow) animate() {
 }
 
 func (s *snow) snow() {
-	space := s.Size().Width - flakeSizeLarge.Width
+	space := int(s.Size().Width - flakeSizeLarge.Width)
 	count := space / 50
 	for i := 0; i < count; i++ {
 
@@ -72,7 +72,7 @@ func (s *snow) snow() {
 		default:
 			f.Resize(flakeSizeSmall)
 		}
-		f.Move(fyne.NewPos(x, -y-f.Size().Height*2))
+		f.Move(fyne.NewPos(float32(x), float32(-y)-f.Size().Height*2))
 
 		s.flakes = append(s.flakes, f)
 	}

@@ -5,12 +5,12 @@ import (
 	"image/color"
 	"math"
 
-	"fyne.io/fyne"
-	"fyne.io/fyne/canvas"
-	"fyne.io/fyne/container"
-	"fyne.io/fyne/theme"
-	"fyne.io/fyne/tools/playground"
-	"fyne.io/fyne/widget"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/tools/playground"
+	"fyne.io/fyne/v2/widget"
 )
 
 var (
@@ -51,9 +51,9 @@ func (r *snowflakeRender) Destroy() {
 }
 
 func (r *snowflakeRender) Layout(s fyne.Size) {
-	hh := int(float64(s.Height/2) * math.Sqrt(3.0))
+	hh := float32(float64(s.Height/2) * math.Sqrt(3.0))
 	len := fyne.Min(s.Width, hh)
-	height := int(float64(len/2) * math.Sqrt(3.0))
+	height := float32(float64(len/2) * math.Sqrt(3.0))
 	off := fyne.NewPos(0, 0)
 	if s.Width > hh {
 		off.X = (s.Width - len) / 2
@@ -95,13 +95,13 @@ func (r *snowflakeRender) Refresh() {
 
 func newLine(start, stop fyne.Position) *canvas.Line {
 	l := canvas.NewLine(theme.TextColor())
-	l.StrokeWidth = 3
+	l.StrokeWidth = 2.5
 	l.Position1 = start
 	l.Position2 = stop
 	return l
 }
 
-func koch(start, stop fyne.Position, len, angle, count int) []*canvas.Line {
+func koch(start, stop fyne.Position, len float32, angle, count int) []*canvas.Line {
 	if count == 0 {
 		return []*canvas.Line{newLine(start, stop)}
 	}
@@ -112,8 +112,8 @@ func koch(start, stop fyne.Position, len, angle, count int) []*canvas.Line {
 
 	ang := angle - 60
 	rad := float64(ang) * math.Pi / 180.0
-	x2 := int(math.Cos(rad) * float64(len/3))
-	y2 := int(math.Sin(rad) * float64(len/3))
+	x2 := float32(math.Cos(rad) * float64(len/3))
+	y2 := float32(math.Sin(rad) * float64(len/3))
 	mid := bend1.Add(fyne.NewPos(x2, y2))
 
 	lines := []*canvas.Line{}
@@ -135,7 +135,7 @@ func koch(start, stop fyne.Position, len, angle, count int) []*canvas.Line {
 func captureSnowflake(s fyne.Size, bg bool) image.Image {
 	c := playground.NewSoftwareCanvas()
 	c.SetPadded(false)
-	fyne.CurrentApp().Settings().SetTheme(&overlayTheme{})
+	fyne.CurrentApp().Settings().SetTheme(theme.FromLegacy(&overlayTheme{}))
 
 	var content fyne.CanvasObject
 	if bg {
@@ -150,6 +150,6 @@ func captureSnowflake(s fyne.Size, bg bool) image.Image {
 	c.SetScale(2)
 
 	img := c.Capture()
-	fyne.CurrentApp().Settings().SetTheme(&cardTheme{})
+	fyne.CurrentApp().Settings().SetTheme(theme.FromLegacy(&cardTheme{}))
 	return img
 }

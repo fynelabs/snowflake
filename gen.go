@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"fyne.io/fyne"
+	"fyne.io/fyne/v2"
 )
 
 func main() {
