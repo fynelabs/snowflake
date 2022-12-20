@@ -20,13 +20,13 @@ func makeUI(s *snow) fyne.CanvasObject {
 	merry := canvas.NewText("Merry Christmas", color.White)
 	merry.Alignment = fyne.TextAlignCenter
 	merry.TextSize = 42
-	to := widget.NewLabel("To our customers and the Fyne community")
+	to := widget.NewLabel("To all our customers, investors\nand the whole Fyne community")
 	to.Alignment = fyne.TextAlignCenter
 	texts := container.NewVBox(merry,
 		container.NewHBox(widget.NewLabel("From the Fyne Labs team"),
 			layout.NewSpacer(),
-			widget.NewButton("Donate", func() {
-				u, _ := url.Parse("https://github.com/sponsors/fyne-io")
+			widget.NewButton("Sponsor", func() {
+				u, _ := url.Parse("https://fyne.io/sponsor/")
 				_ = fyne.CurrentApp().OpenURL(u)
 			})))
 
