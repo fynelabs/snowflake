@@ -20,6 +20,7 @@ func init() {
 type snow struct {
 	widget.BaseWidget
 	flakes []fyne.CanvasObject
+	bg     *canvas.Rectangle
 }
 
 func newSnowLayer() *snow {
@@ -51,7 +52,7 @@ func (s *snow) animate() {
 
 		even = !even
 		s.flakes = flakes
-		canvas.Refresh(s)
+		canvas.Refresh(s.bg)
 	}
 }
 
@@ -77,7 +78,7 @@ func (s *snow) snow() {
 		s.flakes = append(s.flakes, f)
 	}
 
-	canvas.Refresh(s)
+	canvas.Refresh(s.bg)
 }
 
 func (s *snow) CreateRenderer() fyne.WidgetRenderer {

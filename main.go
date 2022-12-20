@@ -70,8 +70,9 @@ func main() {
 
 	s := newSnowLayer()
 	w.SetPadded(false)
+	s.bg = canvas.NewRectangle(&color.NRGBA{R: 0, G: 0, B: 0x4d, A: 0xff})
 	w.SetContent(container.NewMax(
-		canvas.NewRectangle(&color.NRGBA{R: 0, G: 0, B: 0x4d, A: 0xff}),
+		s.bg,
 		container.NewPadded(container.NewPadded(makeUI(s))),
 		s))
 	w.Resize(fyne.NewSize(360, 520))
