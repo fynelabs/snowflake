@@ -40,6 +40,9 @@ func (s *snowflake) CreateRenderer() fyne.WidgetRenderer {
 type snowflakeRender struct {
 	flake *snowflake
 
+	oldSize  fyne.Size
+	oldCount int
+
 	side1, side2, side3 []*canvas.Line
 }
 
@@ -51,6 +54,12 @@ func (r *snowflakeRender) Destroy() {
 }
 
 func (r *snowflakeRender) Layout(s fyne.Size) {
+	if r.flake.Count == r.oldCount && s.Subtract(r.oldSize).IsZero() {
+		return
+	}
+	r.oldCount = r.flake.Count
+	r.oldSize = s
+
 	hh := float32(float64(s.Height/2) * math.Sqrt(3.0))
 	len := fyne.Min(s.Width, hh)
 	height := float32(float64(len/2) * math.Sqrt(3.0))
@@ -68,7 +77,6 @@ func (r *snowflakeRender) Layout(s fyne.Size) {
 	r.side1 = koch(left, top, len, 300, r.flake.Count)
 	r.side2 = koch(top, right, len, 60, r.flake.Count)
 	r.side3 = koch(right, left, len, 180, r.flake.Count)
-	canvas.Refresh(r.flake)
 }
 
 func (r *snowflakeRender) MinSize() fyne.Size {

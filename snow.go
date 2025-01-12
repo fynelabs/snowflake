@@ -52,7 +52,6 @@ func (s *snow) animate() {
 
 		even = !even
 		s.flakes = flakes
-		canvas.Refresh(s.bg)
 	}
 }
 
@@ -65,6 +64,7 @@ func (s *snow) snow() {
 		y := rand.Intn(80)
 
 		f := canvas.NewImageFromImage(pix)
+		f.ScaleMode = canvas.ImageScaleFastest
 		switch rand.Intn(6) {
 		case 5:
 			f.Resize(flakeSizeLarge)
