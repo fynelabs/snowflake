@@ -1,5 +1,5 @@
 [Details]
   Name = "Snowflake"
   ID = "com.fynelabs.snowflake"
-  Build = 15
   Version = "1.2.0"
+  Build = 19

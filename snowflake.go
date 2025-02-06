@@ -103,7 +103,7 @@ func (r *snowflakeRender) Refresh() {
 
 func newLine(start, stop fyne.Position) *canvas.Line {
 	l := canvas.NewLine(theme.TextColor())
-	l.StrokeWidth = 2.5
+	l.StrokeWidth = 2
 	l.Position1 = start
 	l.Position2 = stop
 	return l

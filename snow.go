@@ -32,53 +32,65 @@ func newSnowLayer() *snow {
 }
 
 func (s *snow) animate() {
-	even := false
 	for {
 		<-time.After(time.Millisecond * 16)
-		var flakes []fyne.CanvasObject
-		for _, f := range s.flakes {
-			if f.Size().Height > 40 {
-				f.Move(f.Position().Add(fyne.NewPos(0, 1)))
-			} else if f.Size().Height > 20 {
-				f.Move(f.Position().Add(fyne.NewPos(0, 0.5)))
-			} else if even { // half speed for small
-				f.Move(f.Position().Add(fyne.NewPos(0, 0.5)))
-			}
+		fyne.Do(func() {
+			flakes := make([]fyne.CanvasObject, len(s.flakes))
+			remove := 0
+			for i, f := range s.flakes {
+				if f == nil {
+					continue
+				}
+				if f.Size().Height > 40 {
+					f.Move(f.Position().Add(fyne.NewPos(0, 1)))
+				} else if f.Size().Height > 20 {
+					f.Move(f.Position().Add(fyne.NewPos(0, 0.5)))
+				} else {
+					f.Move(f.Position().Add(fyne.NewPos(0, 0.25)))
+				}
 
-			if f.Position().Y < s.Size().Height + 36 { // mobile overflow approximation
-				flakes = append(flakes, f)
+				if f.Position().Y < s.Size().Height+36 { // mobile overflow approximation
+					flakes[i-remove] = f
+				} else {
+					remove++
+				}
 			}
-		}
-
-		even = !even
-		s.flakes = flakes
+			s.flakes = flakes[:len(flakes)-remove]
+		})
 	}
 }
 
 func (s *snow) snow() {
 	space := int(s.Size().Width - flakeSizeLarge.Width)
 	count := space / 50
-	for i := 0; i < count; i++ {
 
-		x := rand.Intn(space)
-		y := rand.Intn(80)
+	go func() {
+		fyne.Do(func() {
+			flakes := make([]fyne.CanvasObject, count)
+			for i := 0; i < count; i++ {
 
-		f := canvas.NewImageFromImage(pix)
-		f.ScaleMode = canvas.ImageScaleFastest
-		switch rand.Intn(6) {
-		case 5:
-			f.Resize(flakeSizeLarge)
-		case 3, 4:
-			f.Resize(flakeSizeMid)
-		default:
-			f.Resize(flakeSizeSmall)
-		}
-		f.Move(fyne.NewPos(float32(x), float32(-y)-f.Size().Height*2))
+				x := rand.Intn(space)
+				y := rand.Intn(80)
 
-		s.flakes = append(s.flakes, f)
-	}
+				f := canvas.NewImageFromImage(pix)
+				f.ScaleMode = canvas.ImageScaleFastest
+				switch rand.Intn(6) {
+				case 5:
+					f.Resize(flakeSizeLarge)
+				case 3, 4:
+					f.Resize(flakeSizeMid)
+				default:
+					f.Resize(flakeSizeSmall)
+				}
+				f.Move(fyne.NewPos(float32(x), float32(-y)-f.Size().Height*2))
 
-	canvas.Refresh(s.bg)
+				flakes[i] = f
+
+				s.flakes = append(s.flakes, flakes...)
+			}
+		})
+	}()
+
 }
 
 func (s *snow) CreateRenderer() fyne.WidgetRenderer {
